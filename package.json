@@ -1,0 +1,41 @@
+{
+  "name": "hr-management",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "dev": "nodemon",
+    "build": "rm -f -r dist && tsc && tsc-alias",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js -d ./src/config/data-source.ts",
+    "typeorm:run": "npm run typeorm -- migration:run",
+    "typeorm:create": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create ./migrations",
+    "typeorm:revert": "npm run typeorm -- migration:revert",
+    "typeorm:generate": "npm run typeorm -- migration:generate src/migrations/migration",
+    "typeorm:drop": "npm run typeorm -- schema:drop",
+    "typeorm:sync": "npm run typeorm -- schema:sync",
+    "typeorm:log": "npm run typeorm -- schema:log"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "expres": "^0.0.5",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.3",
+    "reflect-metadata": "^0.2.2",
+    "typeorm": "^0.3.20"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.8.2",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.6.3"
+  }
+}
