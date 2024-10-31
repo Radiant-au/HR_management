@@ -1,15 +1,14 @@
-// controllers/EmployeeController.ts
 import { EmployeeService } from "@services/EmployeeService";
 import { Request, Response } from "express";
-
 
 export class EmployeeController {
 
     static async createEmployee(req: Request, res: Response){
         try {
             const token = req.headers.authorization?.split(" ")[1];
-            const employeeData = req.body; // Ensure to validate the input data in production
-            const employee = await EmployeeService.createEmployee(employeeData , token);
+            const employeeData = req.body;
+            const profileImg = req.file?.filename; 
+            const employee = await EmployeeService.createEmployee(employeeData , token , profileImg);
             res.status(201).json(employee);
         } catch (error) {
             console.error(error); 
@@ -42,7 +41,8 @@ export class EmployeeController {
         try {
             const id  = parseInt(req.params.id);
             const employeeData = req.body;
-            const updatedEmployee = await EmployeeService.updateEmployee(id , employeeData);
+            const profileImg = req.file?.filename; 
+            const updatedEmployee = await EmployeeService.updateEmployee(id , employeeData , profileImg);
             res.status(200).json(updatedEmployee);
         } catch (error) {
             console.error(error); 

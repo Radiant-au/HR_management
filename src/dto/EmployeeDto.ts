@@ -1,6 +1,7 @@
 // dtos/CreateEmployeeRequest.dto.ts
 export type EmployeeRequestDto = {
     name: string;
+    profileImg?: string;
     phNo: string;
     CurrentAddress: string;
     PermanentAddress: string;
@@ -14,6 +15,7 @@ export type EmployeeRequestDto = {
 export type EmployeeResponseDto = {
     id: number;
     name: string;
+    profileImg: string;
     phNo: string;
     CurrentAddress: string;
     PermanentAddress?: string;

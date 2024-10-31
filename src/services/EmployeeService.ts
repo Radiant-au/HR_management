@@ -1,18 +1,19 @@
-
-import { Einformation } from "@entities/Einformation";
-import { EmployeeRequestDto, EmployeeResponseDto } from "src/dto/EmployeeDto";
 import { UserService } from "./UserService";
 import { Employee } from "@entities/Employee";
 import { DepartmentService } from "./DepartmentService";
 import { EinfoService } from "./EinfoService";
 import { EmployeeRepository } from "@repositories/EmployeeRepository";
 import { EinformationRepository } from "@repositories/Einformation";
+import { EmployeeRequestDto, EmployeeResponseDto } from "@dtos/EmployeeDto";
+import { Einformation } from "@entities/Einformation";
+import path from "path";
+import fs from "fs";
 
 
 
 export class EmployeeService {
         
-    static async createEmployee(data: EmployeeRequestDto, token: string): Promise<EmployeeResponseDto> {
+    static async createEmployee(data: EmployeeRequestDto, token: string , profileImage?: string): Promise<EmployeeResponseDto> {
         
         const einformation: Einformation = await EinfoService.createInformation({
             degreeOrCertificate: data.degree,
@@ -28,12 +29,14 @@ export class EmployeeService {
         employee.department = await DepartmentService.getDepartmentById(data.departmentId);
         employee.created_by = await UserService.getUserByJWT(token);
         employee.education = einformation;
+        employee.profileImg = profileImage;
 
         const savedEmployee = await EmployeeRepository.save(employee);
 
         const response: EmployeeResponseDto = {
             id: savedEmployee.id,
             name: savedEmployee.name,
+            profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
             CurrentAddress: savedEmployee.CurrentAddress,
             PermanentAddress: savedEmployee.PermanentAddress,
@@ -55,6 +58,7 @@ export class EmployeeService {
             allEmployees.map((data) => ({
                 id: data.id,
                 name: data.name,
+                profileImg: data.profileImg,
                 phNo: data.phNo,
                 CurrentAddress: data.CurrentAddress,
                 PermanentAddress: data.PermanentAddress,
@@ -70,7 +74,7 @@ export class EmployeeService {
         return response;
     }
 
-    static async updateEmployee(id: number , data: EmployeeRequestDto): Promise<EmployeeResponseDto> {
+    static async updateEmployee(id: number , data: EmployeeRequestDto , profileImage?: string): Promise<EmployeeResponseDto> {
 
         const employee = await EmployeeRepository.findOne({
             where: { id },
@@ -79,6 +83,14 @@ export class EmployeeService {
 
         if (!employee) {
             throw new Error(`Employee with id ${id} not found`);
+        }
+
+        if(profileImage && employee.profileImg){
+            const oldImgPath = path.join(__dirname, "../../uploads" , employee.profileImg);
+            if (fs.existsSync(oldImgPath)) {
+                fs.unlinkSync(oldImgPath); 
+            }
+            employee.profileImg = profileImage;
         }
 
         employee.phNo = data.phNo;
@@ -97,11 +109,11 @@ export class EmployeeService {
 
 
         const savedEmployee = await EmployeeRepository.save(employee);
-        console.log(savedEmployee)
 
         const response: EmployeeResponseDto = {
             id: savedEmployee.id,
             name: savedEmployee.name,
+            profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
             CurrentAddress: savedEmployee.CurrentAddress,
             PermanentAddress: savedEmployee.PermanentAddress,
@@ -123,6 +135,7 @@ export class EmployeeService {
         const response: EmployeeResponseDto = {
             id: employee.id,
             name: employee.name,
+            profileImg: employee.profileImg,
             phNo: employee.phNo,
             CurrentAddress: employee.CurrentAddress,
             PermanentAddress: employee.PermanentAddress,
@@ -140,6 +153,14 @@ export class EmployeeService {
             where: { id },
             relations: ['created_by', 'department', 'education']
         });
+
+        if(employee.profileImg){
+            const oldImgPath = path.join(__dirname, "../../uploads" , employee.profileImg);
+            if (fs.existsSync(oldImgPath)) {
+                fs.unlinkSync(oldImgPath); 
+            }
+        }
+
         if(employee){
             await EinformationRepository.delete(employee.education.id);
         }

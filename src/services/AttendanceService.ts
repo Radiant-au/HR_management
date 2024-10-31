@@ -1,0 +1,77 @@
+import { AttendanceResponseDto } from "@dtos/AttendanceDto";
+import { Attendance } from "@entities/Attendance";
+import { AttendanceRepository } from "@repositories/AttendanceRepository";
+import { EmployeeRepository } from "@repositories/EmployeeRepository";
+import moment from "moment-timezone";
+
+
+export class AttendanceService{
+
+        static async CheckInAttendance(id: number): Promise<AttendanceResponseDto> {
+    
+            const employee = await EmployeeRepository.findOne({
+                where: { id },
+                relations: ['department']
+            });
+    
+            if (!employee) throw new Error("Employee not found");
+    
+            const attendance = new Attendance();
+            attendance.employee = employee;
+    
+            // Automatically set attendanceDate to current date in Asia/Yangon
+            attendance.attendanceDate = moment.tz("Asia/Yangon").startOf('day').toDate();
+    
+            // Set checkIn to the current time in Asia/Yangon (time only)
+            attendance.checkIn = moment.tz("Asia/Yangon").format("HH:mm A");
+    
+            attendance.status = this.setCheckInstatus(attendance.checkIn);
+    
+            const savedAttendance = await AttendanceRepository.save(attendance);
+    
+            const response: AttendanceResponseDto = {
+                id: savedAttendance.id,
+                employeeName: savedAttendance.employee.name,
+                attendanceDate: savedAttendance.attendanceDate,
+                checkIn: savedAttendance.checkIn,
+                checkOut: savedAttendance.checkOut,
+                status: savedAttendance.status
+            };
+    
+            return response;
+        }
+    
+        private static setCheckInstatus(checkIn: string): string {
+            const thresholdTime = "09:00:00";
+            return checkIn < thresholdTime ? "On Time" : "Late";
+        }
+
+        static async CheckOutAttendance(employeeId: number): Promise<AttendanceResponseDto> {
+            
+            const todayInYangon = moment.tz("Asia/Yangon").startOf('day').toDate();
+        
+            const attendance = await AttendanceRepository.findOne({
+                where: {
+                    employee: { id: employeeId },
+                    attendanceDate: todayInYangon,
+                },
+                relations: ["employee"], // Load employee if needed
+            });
+
+            attendance.checkOut = moment.tz("Asia/Yangon").format("HH:mm A");
+
+            const savedAttendance = await AttendanceRepository.save(attendance);
+        
+            const response: AttendanceResponseDto = {
+                id: savedAttendance.id,
+                employeeName: savedAttendance.employee.name,
+                attendanceDate: savedAttendance.attendanceDate,
+                checkIn: savedAttendance.checkIn,
+                checkOut: savedAttendance.checkOut,
+                status: savedAttendance.status
+            };
+    
+            return response;
+        }
+    
+}

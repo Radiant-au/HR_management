@@ -12,10 +12,10 @@ export class Attendance {
     @Column()
     attendanceDate: Date;
 
-    @Column({ nullable: true })
+    @Column({nullable: true })
     checkIn: string;
 
-    @Column({ nullable: true })
+    @Column({nullable: true})
     checkOut: string;
 
     @Column()

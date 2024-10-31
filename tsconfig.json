@@ -16,7 +16,8 @@
         "@middlewares/*": ["src/middlewares/*"],
         "@repositories/*": ["src/repositories/*"],
         "@routes/*": ["src/routes/*"],
-        "@services/*": ["src/services/*"]
+        "@services/*": ["src/services/*"],
+        "@dtos/*" : ["src/dto/*"]
       }
     },
     "include": ["src/**/*.ts"],

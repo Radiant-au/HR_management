@@ -1,7 +1,6 @@
 import { Einformation } from "@entities/Einformation";
-import { Employee } from "@entities/Employee";
 import { EinformationRepository } from "@repositories/Einformation";
-import { EmployeeService } from "./EmployeeService";
+
 
 export class EinfoService {
 

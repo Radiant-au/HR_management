@@ -16,6 +16,9 @@ export class Employee {
     name: string;
 
     @Column()
+    profileImg: string;
+
+    @Column()
     CurrentAddress: string;
 
     @Column()
