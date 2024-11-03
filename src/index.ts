@@ -8,6 +8,7 @@ import EmployeeRoute from "@routes/EmployeeRoute"
 import AttendanceRoute from "@routes/AttendanceRoute";
 import path from "path";
 import LeaveRoute from "@routes/LeaveRoute";
+import UserRoute from "@routes/UserRoute"
 
 
 dotenv.config();
@@ -26,6 +27,7 @@ app.get('/', (req , res) => {
 app.use("/auth", AuthRoute);
 app.use("/employee" , EmployeeRoute);
 app.use("/attendance" , AttendanceRoute);
+app.use("/user" , UserRoute);
 app.use("/leave" , LeaveRoute);
 
 const PORT = process.env.PORT || 5000;

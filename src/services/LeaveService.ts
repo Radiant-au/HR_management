@@ -8,7 +8,7 @@ import { LeaveRepository } from "@repositories/LeaveRepository";
 
 export class LeaveService{
     
-    static async createLeave(data: LeaveRequestDTO , id : number , token :string): Promise<LeaveResponseDTO> {
+    static async createLeave(data: LeaveRequestDTO , id : string , token :string): Promise<LeaveResponseDTO> {
 
         const employee = await EmployeeRepository.findOne({ where: { id },
                          relations: ['department']});
@@ -41,5 +41,21 @@ export class LeaveService{
         }
 
         return response;
+    }
+
+    static async getAllLeave() :Promise<LeaveResponseDTO[]> {
+        const allLeave = await LeaveRepository.find({relations: ['approvedBy', 'policy', 'employee']});
+        
+        const response : LeaveResponseDTO[] = allLeave.map((data) => ({
+            id: data.id,
+            employee: data.employee.name,
+            policy: data.policy.name,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            approvedBy: data.approvedBy.username,
+            approvedAt: data.approvedAt
+        }));
+
+       return response;
     }
 }

@@ -34,4 +34,15 @@ export class UserController {
       res.status(400).json({ message: error.message });
     }
   }
+
+  static async registerPassword(req: Request, res: Response) {
+    try {
+
+      const id = req.params.id;
+      const update = await UserService.registerPassword(id , req.body.password);
+      res.json(update);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  }
 }

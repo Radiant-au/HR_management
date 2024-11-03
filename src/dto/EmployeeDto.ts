@@ -1,7 +1,7 @@
 // dtos/CreateEmployeeRequest.dto.ts
-export type EmployeeRequestDto = {
+export interface EmployeeRequestDto  {
     name: string;
-    profileImg?: string;
+    email: string;
     phNo: string;
     CurrentAddress: string;
     PermanentAddress: string;
@@ -12,8 +12,7 @@ export type EmployeeRequestDto = {
 };
 
 // dtos/EmployeeResponse.dto.ts
-export type EmployeeResponseDto = {
-    id: number;
+export interface EmployeeResponseDto {
     name: string;
     profileImg: string;
     phNo: string;
@@ -23,5 +22,5 @@ export type EmployeeResponseDto = {
     einformationId? : {degree : string , experience : string};
     position: string;
     createdById?: {username : string , profileImg : string};
-    
+    role: string;
 };

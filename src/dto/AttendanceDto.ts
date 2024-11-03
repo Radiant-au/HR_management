@@ -2,15 +2,15 @@
 //     employeeId: number;
 // };
 
-export type AttendanceCheckOutRequestDto = {
+export interface AttendanceCheckOutRequestDto {
     attendanceId: number;
     checkOut: string;
 }
 
-export type AttendanceResponseDto = {
+export interface AttendanceResponseDto {
     id: number;
     employeeName: string;
-    attendanceDate: Date;
+    attendanceDate: string;
     checkIn: string | null;
     checkOut: string | null;
     status: string;

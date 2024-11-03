@@ -6,7 +6,7 @@ export class AttendanceController{
 
     static async checkIn(req : Request , res : Response) {
         try{
-            const id = parseInt(req.params.id);
+            const id = req.params.id;
             const checkIn = await AttendanceService.CheckInAttendance(id);
             res.status(200).json(checkIn);
         }catch(error){
@@ -17,7 +17,7 @@ export class AttendanceController{
 
     static async checkOut(req : Request , res : Response) {
         try{
-            const id = parseInt(req.params.id);
+            const id = req.params.id;
             const checkOut = await AttendanceService.CheckOutAttendance(id);
             res.status(200).json(checkOut);
         }catch(error){

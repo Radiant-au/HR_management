@@ -1,4 +1,4 @@
-export type LeaveRequestDTO = {
+export interface LeaveRequestDTO {
     employeeId: number;
     policyId: number;
     startDate: string; // Dates are received as strings (e.g., "2024-11-01")
@@ -6,7 +6,7 @@ export type LeaveRequestDTO = {
     approvedById?: number; // Optional to allow for nullable foreign key
 }
 
-export type LeaveResponseDTO = {
+export interface LeaveResponseDTO {
     id: number;
     employee: string;
     policy: string;

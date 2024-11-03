@@ -6,8 +6,8 @@ import { Einformation } from "./Einformation";
 
 @Entity()
 export class Employee {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
     @Column()
     phNo: string;
@@ -17,6 +17,9 @@ export class Employee {
 
     @Column()
     profileImg: string;
+
+    @Column({ unique: true })
+    email: string;
 
     @Column()
     CurrentAddress: string;
@@ -35,9 +38,9 @@ export class Employee {
     @Column()
     position: string;
 
-    @ManyToOne(() => User)
-    @JoinColumn({ name: "created_by" })
-    created_by: User;
+    @OneToOne(() => User)
+    @JoinColumn({ name: "userId" })
+    userId: User;
 
     @CreateDateColumn()
     created_at: Date;

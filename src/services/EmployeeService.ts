@@ -8,6 +8,8 @@ import { EmployeeRequestDto, EmployeeResponseDto } from "@dtos/EmployeeDto";
 import { Einformation } from "@entities/Einformation";
 import path from "path";
 import fs from "fs";
+import { RoleRepository } from "@repositories/RoleRepository";
+import { UserRepository } from "@repositories/UserRepository";
 
 
 
@@ -27,14 +29,20 @@ export class EmployeeService {
         employee.PermanentAddress = data.PermanentAddress;
         employee.position = data.position;
         employee.department = await DepartmentService.getDepartmentById(data.departmentId);
-        employee.created_by = await UserService.getUserByJWT(token);
         employee.education = einformation;
         employee.profileImg = profileImage;
+
+        const user = await UserService.createUser({
+            email: data.email, // Assuming email is part of EmployeeRequestDto
+            role: await RoleRepository.findOneBy({ id: 3 }),
+            name: data.name
+        });
+        employee.email =data.email;
+        employee.userId = user;
 
         const savedEmployee = await EmployeeRepository.save(employee);
 
         const response: EmployeeResponseDto = {
-            id: savedEmployee.id,
             name: savedEmployee.name,
             profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
@@ -43,7 +51,7 @@ export class EmployeeService {
             departmentName: savedEmployee.department?.name,
             einformationId: {degree : savedEmployee.education.degreeOrCertificate , experience : savedEmployee.education.experience},
             position: savedEmployee.position,
-            createdById: { username: savedEmployee.created_by.username, profileImg: savedEmployee.created_by.profileImg }
+            role: savedEmployee.userId.role.name
         };
 
         return response;
@@ -51,8 +59,9 @@ export class EmployeeService {
 
     static async getAllEmployee(): Promise<EmployeeResponseDto[]>{
         const allEmployees = await EmployeeRepository.find({
-            relations: ['created_by', 'department', 'education']
+            relations: ['userId','userId.role' , 'department', 'education']
         });
+
 
         const response: EmployeeResponseDto[] = 
             allEmployees.map((data) => ({
@@ -65,25 +74,19 @@ export class EmployeeService {
                 departmentName: data.department?.name,  // Get department name if available
                 einformationId: {degree : data.education.degreeOrCertificate , experience : data.education.experience},
                 position: data.position,
-                createdById: {
-                    username: data.created_by.username,
-                    profileImg: data.created_by.profileImg
-                }
+                role: data.userId.role.name
             }));
 
         return response;
     }
 
-    static async updateEmployee(id: number , data: EmployeeRequestDto , profileImage?: string): Promise<EmployeeResponseDto> {
+    static async updateEmployee(Eid: string , data: EmployeeRequestDto , profileImage?: string): Promise<EmployeeResponseDto> {
 
         const employee = await EmployeeRepository.findOne({
-            where: { id },
-            relations: ['created_by', 'department', 'education']
+            where: { id : Eid},
+            relations: ['department', 'education']
         });
 
-        if (!employee) {
-            throw new Error(`Employee with id ${id} not found`);
-        }
 
         if(profileImage && employee.profileImg){
             const oldImgPath = path.join(__dirname, "../../uploads" , employee.profileImg);
@@ -111,7 +114,6 @@ export class EmployeeService {
         const savedEmployee = await EmployeeRepository.save(employee);
 
         const response: EmployeeResponseDto = {
-            id: savedEmployee.id,
             name: savedEmployee.name,
             profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
@@ -120,20 +122,19 @@ export class EmployeeService {
             departmentName: savedEmployee.department?.name,
             einformationId: {degree : savedEmployee.education.degreeOrCertificate , experience : savedEmployee.education.experience},
             position: savedEmployee.position,
-            createdById: { username: savedEmployee.created_by.username, profileImg: savedEmployee.created_by.profileImg }
+            role: savedEmployee.userId?.role.name
         };
 
         return response;
     }
 
-    static async getEmployeeById(id: number){
+    static async getEmployeeById(id: string){
         const employee = await EmployeeRepository.findOne({
             where: { id },
-            relations: ['created_by', 'department', 'education']
+            relations: ['userId','userId.role' , 'department', 'education']
         });
 
         const response: EmployeeResponseDto = {
-            id: employee.id,
             name: employee.name,
             profileImg: employee.profileImg,
             phNo: employee.phNo,
@@ -142,16 +143,16 @@ export class EmployeeService {
             departmentName: employee.department?.name,
             einformationId: {degree : employee.education.degreeOrCertificate , experience : employee.education.experience},
             position: employee.position,
-            createdById: { username: employee.created_by.username, profileImg: employee.created_by.profileImg }
+            role: employee.userId.role.name
         };
 
         return response;
     }
     
-    static async deleteEmployee(id : number){
+    static async deleteEmployee(id : string){
         const employee = await EmployeeRepository.findOne({
             where: { id },
-            relations: ['created_by', 'department', 'education']
+            relations: ['userId', 'department', 'education']
         });
 
         if(employee.profileImg){
@@ -163,6 +164,7 @@ export class EmployeeService {
 
         if(employee){
             await EinformationRepository.delete(employee.education.id);
+            await UserRepository.delete(employee.userId.id);
         }
         return await EmployeeRepository.delete(id);
     }

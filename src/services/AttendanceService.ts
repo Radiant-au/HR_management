@@ -7,7 +7,7 @@ import moment from "moment-timezone";
 
 export class AttendanceService{
 
-        static async CheckInAttendance(id: number): Promise<AttendanceResponseDto> {
+        static async CheckInAttendance(id: string): Promise<AttendanceResponseDto> {
     
             const employee = await EmployeeRepository.findOne({
                 where: { id },
@@ -32,7 +32,7 @@ export class AttendanceService{
             const response: AttendanceResponseDto = {
                 id: savedAttendance.id,
                 employeeName: savedAttendance.employee.name,
-                attendanceDate: savedAttendance.attendanceDate,
+                attendanceDate: moment(savedAttendance.attendanceDate).format("YYYY-MM-DD HH:mm:ss"),
                 checkIn: savedAttendance.checkIn,
                 checkOut: savedAttendance.checkOut,
                 status: savedAttendance.status
@@ -46,7 +46,7 @@ export class AttendanceService{
             return checkIn < thresholdTime ? "On Time" : "Late";
         }
 
-        static async CheckOutAttendance(employeeId: number): Promise<AttendanceResponseDto> {
+        static async CheckOutAttendance(employeeId: string): Promise<AttendanceResponseDto> {
             
             const todayInYangon = moment.tz("Asia/Yangon").startOf('day').toDate();
         
@@ -65,7 +65,7 @@ export class AttendanceService{
             const response: AttendanceResponseDto = {
                 id: savedAttendance.id,
                 employeeName: savedAttendance.employee.name,
-                attendanceDate: savedAttendance.attendanceDate,
+                attendanceDate: moment(savedAttendance.attendanceDate).format("YYYY-MM-DD HH:mm:ss"),
                 checkIn: savedAttendance.checkIn,
                 checkOut: savedAttendance.checkOut,
                 status: savedAttendance.status

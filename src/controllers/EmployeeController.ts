@@ -28,7 +28,7 @@ export class EmployeeController {
 
     static async getEmployeeById(req: Request , res: Response){
         try{
-            const id = parseInt(req.params.id);
+            const id = req.params.id;
             const employee = await EmployeeService.getEmployeeById(id);
             res.status(200).json(employee);
         }catch (error) {
@@ -39,7 +39,7 @@ export class EmployeeController {
 
     static async updateEmployee(req: Request , res: Response){
         try {
-            const id  = parseInt(req.params.id);
+            const id  = req.params.id;
             const employeeData = req.body;
             const profileImg = req.file?.filename; 
             const updatedEmployee = await EmployeeService.updateEmployee(id , employeeData , profileImg);
@@ -52,7 +52,7 @@ export class EmployeeController {
 
     static async deleteEmployee(req: Request , res: Response){
         try{
-            const id = parseInt(req.params.id);
+            const id = req.params.id;
             await EmployeeService.deleteEmployee(id);
             res.status(200).json({message : "Successfully Deleted employee id" + id});
         }catch(error){
