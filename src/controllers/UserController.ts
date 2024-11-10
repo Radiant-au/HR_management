@@ -1,10 +1,12 @@
 // src/controllers/UserController.ts
+import { UserResponseDto } from "@dtos/UserDto";
 import { UserService } from "@services/UserService";
 import { Request, Response } from "express";
 
 
 export class UserController {
-  static async getUserProfile(req: Request, res: Response) {
+
+  static async getUserProfile(req: Request, res: Response){
     try {
       const token = req.headers.authorization?.split(" ")[1];
       if (!token){
@@ -13,7 +15,13 @@ export class UserController {
       }  
 
       const user = await UserService.getUserByJWT(token);
-      res.json(user);
+      const response :UserResponseDto = {
+        username : user.username,
+        email : user.email,
+        profileImg : user.profileImg,
+        role : user.role.name
+      }
+      res.json(response);
     } catch (error) {
       res.status(403).json({ message: error.message });
     }
@@ -27,8 +35,8 @@ export class UserController {
         return;
       }
 
-      const user = await UserService.getUserByJWT(token);
-      const updatedUser = await UserService.updateUserProfile(user.id, req.body);
+      const profileImg = req.file?.filename; 
+      const updatedUser = await UserService.updateUserProfile(token , profileImg , req.body);
       res.json(updatedUser);
     } catch (error) {
       res.status(400).json({ message: error.message });

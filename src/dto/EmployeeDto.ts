@@ -13,6 +13,7 @@ export interface EmployeeRequestDto  {
 
 // dtos/EmployeeResponse.dto.ts
 export interface EmployeeResponseDto {
+    id: string,
     name: string;
     profileImg: string;
     phNo: string;

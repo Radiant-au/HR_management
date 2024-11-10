@@ -4,6 +4,8 @@ import { LeavePolicyRepository } from "@repositories/LeavePolicyRepository";
 import { UserService } from "./UserService";
 import { Leave } from "@entities/Leave";
 import { LeaveRepository } from "@repositories/LeaveRepository";
+import { LeaveLog } from "@entities/LeaveLog";
+import { LeaveLogRepository } from "@repositories/LeaveLogRepository";
 
 
 export class LeaveService{
@@ -28,7 +30,14 @@ export class LeaveService{
         leave.approvedBy = approvedBy;
         leave.approvedAt = new Date();
 
+        const leave_log = new LeaveLog();
+        leave_log.employee = employee;
+        leave_log.policy = policy;
+
+        await LeaveLogRepository.save(leave_log);
+
         const savedLeave = await LeaveRepository.save(leave);
+        
 
         const response : LeaveResponseDTO ={
             id: savedLeave.id,
@@ -58,4 +67,5 @@ export class LeaveService{
 
        return response;
     }
+
 }

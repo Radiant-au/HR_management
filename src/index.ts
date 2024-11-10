@@ -15,7 +15,10 @@ dotenv.config();
 AppDataSource.initialize();
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Allow only your React app in development
+    credentials: true,               // Allow cookies if you're using authentication
+  }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 app.use('/', express.static(path.join(__dirname, '../uploads')));

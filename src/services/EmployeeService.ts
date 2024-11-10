@@ -43,6 +43,7 @@ export class EmployeeService {
         const savedEmployee = await EmployeeRepository.save(employee);
 
         const response: EmployeeResponseDto = {
+            id: savedEmployee.id,
             name: savedEmployee.name,
             profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
@@ -59,7 +60,7 @@ export class EmployeeService {
 
     static async getAllEmployee(): Promise<EmployeeResponseDto[]>{
         const allEmployees = await EmployeeRepository.find({
-            relations: ['userId','userId.role' , 'department', 'education']
+            relations: ['userId.role' , 'department', 'education']
         });
 
 
@@ -88,10 +89,12 @@ export class EmployeeService {
         });
 
 
-        if(profileImage && employee.profileImg){
-            const oldImgPath = path.join(__dirname, "../../uploads" , employee.profileImg);
-            if (fs.existsSync(oldImgPath)) {
-                fs.unlinkSync(oldImgPath); 
+        if(profileImage){
+            if(employee.profileImg){
+                const oldImgPath = path.join(__dirname, "../../uploads" , employee.profileImg);
+                if (fs.existsSync(oldImgPath)) {
+                    fs.unlinkSync(oldImgPath); 
+                }
             }
             employee.profileImg = profileImage;
         }
@@ -114,6 +117,7 @@ export class EmployeeService {
         const savedEmployee = await EmployeeRepository.save(employee);
 
         const response: EmployeeResponseDto = {
+            id: savedEmployee.id,
             name: savedEmployee.name,
             profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
@@ -128,13 +132,14 @@ export class EmployeeService {
         return response;
     }
 
-    static async getEmployeeById(id: string){
+    static async getEmployeeById(id: string): Promise<EmployeeResponseDto>{
         const employee = await EmployeeRepository.findOne({
             where: { id },
-            relations: ['userId','userId.role' , 'department', 'education']
+            relations: ['userId.role' , 'department', 'education']
         });
 
         const response: EmployeeResponseDto = {
+            id: employee.id,
             name: employee.name,
             profileImg: employee.profileImg,
             phNo: employee.phNo,

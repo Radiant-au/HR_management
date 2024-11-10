@@ -3,6 +3,7 @@ import { Attendance } from "@entities/Attendance";
 import { AttendanceRepository } from "@repositories/AttendanceRepository";
 import { EmployeeRepository } from "@repositories/EmployeeRepository";
 import moment from "moment-timezone";
+import { relative } from "path";
 
 
 export class AttendanceService{
@@ -70,6 +71,24 @@ export class AttendanceService{
                 checkOut: savedAttendance.checkOut,
                 status: savedAttendance.status
             };
+    
+            return response;
+        }
+
+        static async getAllAttendance(): Promise<AttendanceResponseDto[]>{
+            const attendance = await AttendanceRepository.find({relations:['employee.department']});
+
+            const response: AttendanceResponseDto[] = 
+                attendance.map((data) =>({
+                    id: data.id,
+                    employeeName: data.employee.name,
+                    department: data.employee.department.name,
+                    attendanceDate: moment(data.attendanceDate).format("YYYY-MM-DD HH:mm:ss"),
+                    checkIn: data.checkIn,
+                    checkOut: data.checkOut,
+                    status: data.status
+                }));
+            
     
             return response;
         }
