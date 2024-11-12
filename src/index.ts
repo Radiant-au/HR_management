@@ -9,6 +9,7 @@ import AttendanceRoute from "@routes/AttendanceRoute";
 import path from "path";
 import LeaveRoute from "@routes/LeaveRoute";
 import UserRoute from "@routes/UserRoute"
+import DepartmentRoute from "@routes/DepartmentRoute";
 
 
 dotenv.config();
@@ -32,6 +33,7 @@ app.use("/employee" , EmployeeRoute);
 app.use("/attendance" , AttendanceRoute);
 app.use("/user" , UserRoute);
 app.use("/leave" , LeaveRoute);
+app.use("/department" , DepartmentRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

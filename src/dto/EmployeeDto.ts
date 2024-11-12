@@ -15,6 +15,7 @@ export interface EmployeeRequestDto  {
 export interface EmployeeResponseDto {
     id: string,
     name: string;
+    email: string;
     profileImg: string;
     phNo: string;
     CurrentAddress: string;

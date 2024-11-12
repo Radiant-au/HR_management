@@ -44,6 +44,7 @@ export class EmployeeService {
 
         const response: EmployeeResponseDto = {
             id: savedEmployee.id,
+            email: employee.email,
             name: savedEmployee.name,
             profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
@@ -68,6 +69,7 @@ export class EmployeeService {
             allEmployees.map((data) => ({
                 id: data.id,
                 name: data.name,
+                email: data.email,
                 profileImg: data.profileImg,
                 phNo: data.phNo,
                 CurrentAddress: data.CurrentAddress,
@@ -119,6 +121,7 @@ export class EmployeeService {
         const response: EmployeeResponseDto = {
             id: savedEmployee.id,
             name: savedEmployee.name,
+            email: savedEmployee.email,
             profileImg: savedEmployee.profileImg,
             phNo: savedEmployee.phNo,
             CurrentAddress: savedEmployee.CurrentAddress,
@@ -141,6 +144,7 @@ export class EmployeeService {
         const response: EmployeeResponseDto = {
             id: employee.id,
             name: employee.name,
+            email: employee.email,
             profileImg: employee.profileImg,
             phNo: employee.phNo,
             CurrentAddress: employee.CurrentAddress,
