@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const AppDataSource = new DataSource({
-  type: "mariadb",
+  type: "mysql",
   host: process.env.DB_HOST,
   port: parseInt(process.env.DB_PORT || "3306"),
   username: process.env.DB_USERNAME,

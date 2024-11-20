@@ -22,7 +22,7 @@ export class Leave {
     endDate: Date;
 
     @ManyToOne(() => User, { nullable: true }) // Make approvedBy nullable
-    approvedBy: User | null;
+    createdBy: User | null;
 
     @Column({ nullable: true })
     approvedAt: Date;

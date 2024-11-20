@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn,  ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, JoinColumn,  ManyToOne, DeleteDateColumn } from "typeorm";
 import { Role } from "./Role";
 
 @Entity()
@@ -6,13 +6,13 @@ export class User {
     @PrimaryGeneratedColumn("uuid")
     id: string;
 
-    @Column()
+    @Column({ nullable: true })
     username: string;
 
     @Column({nullable : true})
     password: string;
 
-    @Column({ unique: true })
+    @Column({ unique: true  , nullable : true})
     email: string;
 
     @Column({ nullable: true })
@@ -27,4 +27,7 @@ export class User {
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @DeleteDateColumn()
+    deleted_at: Date | null;
 }

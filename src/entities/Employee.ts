@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 import { User } from "./User";
 import { Department } from "./Department";
 
 import { Einformation } from "./Einformation";
+import { Position } from "./Position";
 
 @Entity()
 export class Employee {
@@ -15,10 +16,10 @@ export class Employee {
     @Column()
     name: string;
 
-    @Column()
+    @Column({nullable : true})
     profileImg: string;
 
-    @Column({ unique: true })
+    @Column({ unique: true , nullable: true  })
     email: string;
 
     @Column()
@@ -27,7 +28,7 @@ export class Employee {
     @Column()
     PermanentAddress: string;
 
-    @OneToOne(() => Einformation ,  { cascade: true, onDelete: "CASCADE" })
+    @OneToOne(() => Einformation)
     @JoinColumn({ name: "e_background_id" })
     education: Einformation;
 
@@ -35,8 +36,9 @@ export class Employee {
     @JoinColumn({ name: "department_id" })
     department: Department;
 
-    @Column()
-    position: string;
+    @ManyToOne(() => Position)
+    @JoinColumn({name: "position_id"})
+    position: Position;
 
     @OneToOne(() => User)
     @JoinColumn({ name: "userId" })
@@ -47,4 +49,7 @@ export class Employee {
 
     @UpdateDateColumn()
     updated_at: Date;
+
+    @DeleteDateColumn()
+    deleted_at: Date | null;
 }

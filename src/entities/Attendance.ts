@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm";
 import { Employee } from "./Employee";
+import { Shift } from "./Shift";
 
 @Entity()
 export class Attendance {
@@ -8,6 +9,10 @@ export class Attendance {
 
     @ManyToOne(() => Employee)
     employee: Employee;
+
+    @ManyToOne(() => Shift)
+    @JoinColumn({ name: "shift_id" })
+    shift: Shift;
 
     @Column()
     attendanceDate: Date;
@@ -18,6 +23,10 @@ export class Attendance {
     @Column({nullable: true})
     checkOut: string;
 
-    @Column()
+    @Column({
+        type: "enum",
+        enum: ["PRESENT", "LATE", "ABSENT"],
+        default: "PRESENT"
+    })
     status: string;
 }

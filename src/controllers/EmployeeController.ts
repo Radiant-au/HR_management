@@ -8,6 +8,7 @@ export class EmployeeController {
             const token = req.headers.authorization?.split(" ")[1];
             const employeeData = req.body;
             const profileImg = req.file?.filename; 
+            console.log(employeeData);
             const employee = await EmployeeService.createEmployee(employeeData , token , profileImg);
             res.status(201).json(employee);
         } catch (error) {

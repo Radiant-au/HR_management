@@ -1,13 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn} from "typeorm";
 
 @Entity()
 export class Einformation {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({nullable: true})
     degreeOrCertificate: string;
 
-    @Column()
+    @Column({nullable: true})
     experience: string;
+
+    @DeleteDateColumn()
+    deleted_at: Date | null;
 }

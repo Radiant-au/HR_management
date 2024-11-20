@@ -10,6 +10,8 @@ import path from "path";
 import LeaveRoute from "@routes/LeaveRoute";
 import UserRoute from "@routes/UserRoute"
 import DepartmentRoute from "@routes/DepartmentRoute";
+import ShiftRoute from "@routes/ShiftRoute";
+import PositionRoute from "@routes/PositionRoute";
 
 
 dotenv.config();
@@ -17,7 +19,9 @@ AppDataSource.initialize();
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:3000', // Allow only your React app in development
+    origin: ['http://localhost:4173' , 'http://localhost:3000' , 'https://rico.com.mm'], // Allow only your React app in development
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,               // Allow cookies if you're using authentication
   }));
 app.use(express.json());
@@ -34,6 +38,8 @@ app.use("/attendance" , AttendanceRoute);
 app.use("/user" , UserRoute);
 app.use("/leave" , LeaveRoute);
 app.use("/department" , DepartmentRoute);
+app.use("/shift", ShiftRoute)
+app.use("/position" , PositionRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
