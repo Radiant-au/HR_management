@@ -4,7 +4,7 @@ import { DepartmentService } from "./DepartmentService";
 import { EinfoService } from "./EinfoService";
 import { EmployeeRepository } from "@repositories/EmployeeRepository";
 import { EinformationRepository } from "@repositories/Einformation";
-import { EmployeeRequestDto, EmployeeResponseDto } from "@dtos/EmployeeDto";
+import { EmployeeRequestDto, EmployeeResponseDto, EmployeeScroll } from "@dtos/EmployeeDto";
 import { Einformation } from "@entities/Einformation";
 import path from "path";
 import fs from "fs";
@@ -15,6 +15,7 @@ import { Role } from "@entities/Role";
 import { User } from "@entities/User";
 import { Position } from "@entities/Position";
 import { PositionService } from "./PositionService";
+
 
 
 
@@ -53,7 +54,7 @@ export class EmployeeService {
                 employee.department = department;
                 employee.education = einformation;
                 employee.profileImg = profileImage || null;
-                employee.email = data.email;
+                employee.email = data.email || null;
     
                 // Step 3: Create associated User entity
                 const role = await transactionalEntityManager.findOne(Role, { where: { id: 3 } });
@@ -80,7 +81,10 @@ export class EmployeeService {
 
     static async getAllEmployee(): Promise<EmployeeResponseDto[]>{
         const allEmployees = await EmployeeRepository.find({
-            relations: ['userId.role' , 'department' , "position"]
+            relations: ['userId.role' , 'department' , "position"],
+            order: {
+                updated_at: 'DESC',  // Sort by updatedAt in descending order (optional)
+            }
         });
 
 
@@ -169,7 +173,7 @@ export class EmployeeService {
             PermanentAddress: employee.PermanentAddress,
             departmentName: employee.department?.id,
             einformationId: {degree : employee.education.degreeOrCertificate , experience : employee.education.experience},
-            position: employee.position.name,
+            position: employee.position?.id,
             role: employee.userId.role.name
         };
 

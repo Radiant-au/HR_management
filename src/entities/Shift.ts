@@ -1,11 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne } from "typeorm";
 import { User } from "./User";
+import { EmployeeShift } from "./EmployeeShift";
 
 
 @Entity()
 export class Shift {
     @PrimaryGeneratedColumn()
-    id: string;
+    id: number;
 
     @Column()
     type: string; // The type of shift (Day or Night)
@@ -30,4 +31,5 @@ export class Shift {
 
     @DeleteDateColumn()
     deleted_at: Date | null;
+    
 }

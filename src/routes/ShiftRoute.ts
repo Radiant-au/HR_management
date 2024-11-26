@@ -6,8 +6,8 @@ const router = Router();
 
 router.post("/", authenticateToken , authorizeRoles('admin' , 'hr') , ShiftController.createShift);
 router.get("/" , authenticateToken , authorizeRoles('admin' , 'hr') , ShiftController.getAllShift);
-router.post("/assign/:id", authenticateToken , authorizeRoles('admin' , 'hr') , ShiftController.assignEmployee);
-router.get("/employees" , authenticateToken , authorizeRoles('admin' , 'hr') , ShiftController.shiftEmployees);
-
+router.get("/:id" , authenticateToken , authorizeRoles('admin' ,'hr') , ShiftController.getShiftById);
+router.put("/:id" , authenticateToken , authorizeRoles('admin' , 'hr') , ShiftController.editShift);
+router.delete("/:id" , authenticateToken , authorizeRoles('admin' , 'hr') , ShiftController.deleteShift);
 
 export default router;

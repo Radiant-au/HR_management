@@ -1,10 +1,8 @@
-import { EmployeeShiftDetailsDto, employeeShiftDTO, employeeShiftRequestDto, ShiftRequestDTO, ShiftResponseDTO } from "@dtos/ShiftDto";
+import {  ShiftRequestDTO, ShiftResponseDTO } from "@dtos/ShiftDto";
 import { ShiftRepository } from "@repositories/ShiftRepository";
-import { EmployeeRepository } from "@repositories/EmployeeRepository";
 import { Shift } from "@entities/Shift";
-import { EmployeeShift } from "@entities/EmployeeShift";
 import { UserService } from "./UserService";
-import { EmployeeShiftRepository } from "@repositories/EmployeeShiftRepository";
+
 
 export class ShiftService {
 
@@ -37,85 +35,43 @@ export class ShiftService {
     }
 
     // Edit an existing shift
-    // static async editShift(shiftId: string, data: ShiftRequestDTO, token: string): Promise<ShiftResponseDTO> {
-    //     const admin = await UserService.getUserByJWT(token);
+    static async editShift(shiftId: number, data: ShiftRequestDTO): Promise<ShiftResponseDTO> {
 
-    //     // Fetch the shift to update
-    //     const shift = await ShiftRepository.findOne(shiftId);
-    //     if (!shift) {
-    //         throw new Error("Shift not found");
-    //     }
-
-    //     // Update shift fields
-    //     shift.type = data.type || shift.type;
-    //     shift.start_time = data.start_time || shift.start_time;
-    //     shift.end_time = data.end_time || shift.end_time;
-    //     shift.grace_period = data.grace_period || shift.grace_period;
-
-    //     const updatedShift = await ShiftRepository.save(shift);
-
-    //     // Create response DTO
-    //     const response: ShiftResponseDTO = {
-    //         id: updatedShift.id,
-    //         type: updatedShift.type,
-    //         start_time: updatedShift.start_time,
-    //         end_time: updatedShift.end_time,
-    //         grace_period: updatedShift.grace_period,
-    //         created_at: updatedShift.created_at,
-    //         updated_at: updatedShift.updated_at
-    //     };
-
-    //     return response;
-    // }
-
-    // Assign employee to a shift
-    static async assignEmployeeToShift(data: employeeShiftRequestDto, shiftId: string, token: string): Promise<employeeShiftDTO> {
-        const admin = await UserService.getUserByJWT(token);
-
-        // Fetch employee and shift
-        const employee = await EmployeeRepository.findOne({where: {  id : data.id }});
+        // Fetch the shift to update
         const shift = await ShiftRepository.findOne({where : {id : shiftId}});
-
-        if (!employee || !shift) {
-            throw new Error("Employee or Shift not found");
+        if (!shift) {
+            throw new Error("Shift not found");
         }
 
-        // Create EmployeeShift record to assign the employee to the shift
-        const employeeShift = new EmployeeShift();
-        employeeShift.employee = employee;
-        employeeShift.shift = shift;
-        employeeShift.createdBy = admin;
+        // Update shift fields
+        shift.type = data.type || shift.type;
+        shift.start_time = data.start_time || shift.start_time;
+        shift.end_time = data.end_time || shift.end_time;
+        shift.grace_period = data.grace_period || shift.grace_period;
 
-        const assignedShift = await EmployeeShiftRepository.save(employeeShift);
+        const updatedShift = await ShiftRepository.save(shift);
 
-        // Prepare and return response
-        const response: employeeShiftDTO = {
-            type: assignedShift.shift.type,
-            start_time: assignedShift.shift.start_time,
-            end_time: assignedShift.shift.end_time,
-            createdByName: assignedShift.createdBy.username,
-            employeName: assignedShift.employee.name
+        // Create response DTO
+        const response: ShiftResponseDTO = {
+            type: updatedShift.type,
+            start_time: updatedShift.start_time,
+            end_time: updatedShift.end_time,
+            grace_period: updatedShift.grace_period 
         };
 
         return response;
     }
 
     // Soft delete a shift (mark it as deleted without removing it)
-    // static async softDeleteShift(shiftId: string, token: string): Promise<boolean> {
-    //     const admin = await UserService.getUserByJWT(token);
+    static async softDeleteShift(shiftId: number): Promise<boolean> {
+        // Fetch shift
+        const shift = await ShiftRepository.findOne({where : {id : shiftId}});
+        if (shift) {
+            await ShiftRepository.softDelete(shiftId);
+        }
 
-    //     // Fetch shift
-    //     const shift = await ShiftRepository.findOne(shiftId);
-    //     if (!shift) {
-    //         throw new Error("Shift not found");
-    //     }
-
-    //     // Soft delete the shift by setting the deleted_at field
-    //     shift.deleted_at = new Date();
-    //     await ShiftRepository.save(shift);
-
-    //     return true;
-    // }
+        return true;
+    }
 
     // Get all shifts (including those that may have been soft deleted)
     static async getAllShifts(): Promise<ShiftResponseDTO[]> {
@@ -134,9 +90,17 @@ export class ShiftService {
         return response;
     }
 
-    static async getEmployeeByShifts() :Promise<EmployeeShiftDetailsDto[]>{
-        const shiftsEmployee = await EmployeeShiftRepository.findWithDetails();
+    static async getShiftById(shift_id :number): Promise<ShiftResponseDTO>{
+        const shift = await ShiftRepository.findOne({where : {id : shift_id}});
+        const res : ShiftResponseDTO = {
+            id: shift.id,
+            type: shift.type,
+            start_time: shift.start_time,
+            end_time: shift.end_time,
+            grace_period: shift.grace_period 
+        }
 
-        return shiftsEmployee;
+        return res;
     }
+
 }

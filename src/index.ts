@@ -12,6 +12,7 @@ import UserRoute from "@routes/UserRoute"
 import DepartmentRoute from "@routes/DepartmentRoute";
 import ShiftRoute from "@routes/ShiftRoute";
 import PositionRoute from "@routes/PositionRoute";
+import EmpShiftRoute from "@routes/EmpShiftRoute";
 
 
 dotenv.config();
@@ -40,6 +41,7 @@ app.use("/leave" , LeaveRoute);
 app.use("/department" , DepartmentRoute);
 app.use("/shift", ShiftRoute)
 app.use("/position" , PositionRoute)
+app.use("/emp_shift" , EmpShiftRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

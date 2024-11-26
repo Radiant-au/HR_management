@@ -22,8 +22,14 @@ export interface EmployeeResponseDto {
     PermanentAddress?: string;
     departmentName: string | number;
     einformationId? : {degree : string , experience : string};
-    position: string;
+    position: string | number;
     createdById?: {username : string , profileImg : string};
     role: string;
 };
+
+export interface EmployeeScroll{
+    id: string;
+    profileImg: string;
+    name: string;
+}
 

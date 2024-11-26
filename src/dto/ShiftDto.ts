@@ -6,12 +6,12 @@ export interface ShiftRequestDTO {
 }
 
 export interface ShiftResponseDTO {
-    id: string;
+    id?:  number | string;
     type: string;
     start_time: string;
     end_time: string;
-    createdByName: string;
-    profileImg: string;
+    createdByName?: string;
+    profileImg?: string;
     grace_period: number;
 }
 
@@ -28,7 +28,7 @@ export interface employeeShiftRequestDto{
 }
 
 export interface EmployeeShiftDetailsDto {
-    id: string;
+    id: number;
     employeeName: string;
     employeeProfileImg: string;
     shiftType: string;
