@@ -1,7 +1,7 @@
 import { AppDataSource } from "@config/data-source";
 import { EmployeeShiftDetailsDto } from "@dtos/ShiftDto";
 import { EmployeeShift } from "@entities/EmployeeShift";
-import { Brackets } from "typeorm";
+
 
 export const EmployeeShiftRepository = AppDataSource.getRepository(EmployeeShift).extend({
     async findWithDetails(): Promise<EmployeeShiftDetailsDto[]> {

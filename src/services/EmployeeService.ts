@@ -180,7 +180,6 @@ export class EmployeeService {
         return response;
     }
     
-
     static async deleteEmployee(id: string) {
         // Fetch the employee with all required relations
         const employee = await EmployeeRepository.findOne({

@@ -8,6 +8,6 @@ export class LeavePolicy {
     @Column()
     name: string;
     
-    @Column()
-    days: number;
+    @Column({ type: 'int', default: 0 })
+    defaultCredit: number; // Default credit for the policy
 }

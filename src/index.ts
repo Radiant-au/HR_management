@@ -13,6 +13,9 @@ import DepartmentRoute from "@routes/DepartmentRoute";
 import ShiftRoute from "@routes/ShiftRoute";
 import PositionRoute from "@routes/PositionRoute";
 import EmpShiftRoute from "@routes/EmpShiftRoute";
+import OvertimeRoute from "@routes/OvertimeRoute";
+import EmpOvertimeRoute from "@routes/EmpOvertimeRoute";
+import LeavePolicyRoute from "@routes/LeavePolicyRoute";
 
 
 dotenv.config();
@@ -42,6 +45,9 @@ app.use("/department" , DepartmentRoute);
 app.use("/shift", ShiftRoute)
 app.use("/position" , PositionRoute)
 app.use("/emp_shift" , EmpShiftRoute)
+app.use("/overtime" , OvertimeRoute)
+app.use("/emp_overtime" , EmpOvertimeRoute)
+app.use("/leavePolicy" , LeavePolicyRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

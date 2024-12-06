@@ -3,7 +3,6 @@ import { Employee } from "./Employee";
 import { User } from "./User";
 import { LeavePolicy } from "./LeavePolicty";
 
-
 @Entity()
 export class Leave {
     @PrimaryGeneratedColumn()
@@ -21,9 +20,12 @@ export class Leave {
     @Column()
     endDate: Date;
 
-    @ManyToOne(() => User, { nullable: true }) // Make approvedBy nullable
+    @Column({ default: 'pending' })
+    status: string; // Status column with default value 'pending'
+
+    @ManyToOne(() => User, { nullable: true }) // Make createdBy nullable
     createdBy: User | null;
 
-    @Column({ nullable: true })
-    approvedAt: Date;
+    @ManyToOne(() => User, { nullable: true }) // Make approvedBy nullable
+    approved_by: User | null;
 }
