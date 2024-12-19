@@ -27,6 +27,16 @@ export class EmployeeController {
         }
     }
 
+    static async getAllScorllEmployee(req: Request , res: Response){
+        try {
+            const employee = await EmployeeService.getAllEmpScroll();
+            res.status(200).json(employee);
+        } catch (error) {
+            console.error(error); 
+            res.status(500).json({ message: "Error getting employee", error });
+        }
+    }
+
     static async getEmployeeById(req: Request , res: Response){
         try{
             const id = req.params.id;

@@ -13,15 +13,12 @@ export class LeaveBalance {
     @ManyToOne(() => LeavePolicy)
     policy: LeavePolicy;
 
-    @Column({ type: 'int', default: 0 })
-    credit: number; // Total leave allowed
+    @Column()
+    year: number; 
 
     @Column({ type: 'int', default: 0 })
     used: number; // Leave taken
 
-    @Column({ type: 'int', default: 0 })
-    unpaid: number; // Unpaid leave taken
-
-    @Column({ type: 'int', default: 0 })
-    carryForwarded: number; // Previous year's carry-forward
+    // @Column({ type: 'int', default: 0 })
+    // unpaid: number; // Unpaid leave taken
 }

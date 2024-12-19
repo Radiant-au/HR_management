@@ -16,6 +16,7 @@ import EmpShiftRoute from "@routes/EmpShiftRoute";
 import OvertimeRoute from "@routes/OvertimeRoute";
 import EmpOvertimeRoute from "@routes/EmpOvertimeRoute";
 import LeavePolicyRoute from "@routes/LeavePolicyRoute";
+import LeaveBalanceRoute from "@routes/LeaveBalanceRoute";
 
 
 dotenv.config();
@@ -48,6 +49,7 @@ app.use("/emp_shift" , EmpShiftRoute)
 app.use("/overtime" , OvertimeRoute)
 app.use("/emp_overtime" , EmpOvertimeRoute)
 app.use("/leavePolicy" , LeavePolicyRoute)
+app.use("/leaveBalance" , LeaveBalanceRoute)
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

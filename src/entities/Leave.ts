@@ -14,17 +14,14 @@ export class Leave {
     @ManyToOne(() => LeavePolicy)
     policy: LeavePolicy; // Links each leave entry to a specific policy
 
-    @Column()
-    startDate: Date;
+    @Column({ type: "date" })
+    startDate: string;
 
-    @Column()
-    endDate: Date;
+    @Column({ type: "date" })
+    endDate: string;
 
     @Column({ default: 'pending' })
     status: string; // Status column with default value 'pending'
-
-    @ManyToOne(() => User, { nullable: true }) // Make createdBy nullable
-    createdBy: User | null;
 
     @ManyToOne(() => User, { nullable: true }) // Make approvedBy nullable
     approved_by: User | null;

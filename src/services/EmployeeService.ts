@@ -1,4 +1,3 @@
-import { UserService } from "./UserService";
 import { Employee } from "@entities/Employee";
 import { DepartmentService } from "./DepartmentService";
 import { EinfoService } from "./EinfoService";
@@ -101,6 +100,23 @@ export class EmployeeService {
                 position: data.position.name,
                 role: data.userId.role.name
             }));
+
+        return response;
+    }
+
+    static async getAllEmpScroll(): Promise<EmployeeScroll[]>{
+        const allEmployees = await EmployeeRepository.find({ select: {
+            id: true,
+            name: true,
+            profileImg: true,
+        },
+        })
+
+        const response : EmployeeScroll[] = allEmployees.map((data) => ({
+            id: data.id,
+            profileImg: data.profileImg,
+            name: data.name
+        }))
 
         return response;
     }
